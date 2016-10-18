@@ -23,8 +23,8 @@ router.get('/',function(req, res) {
         });
     });
 //删除某个URL
-router.delete('/:pic_id',function(req, res) {
-    Picture.remove({ _id: req.params.pic_id}, 
+router.delete('/:_id',function(req, res) {
+    Picture.remove({ _id: req.params._id}, 
         function(err, pic) {
         if (err) res.send(err);
         res.json({ message: 'Successfully deleted' });

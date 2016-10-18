@@ -4,13 +4,15 @@ const router = express.Router();
 
 router.post('/',function(req, res) {
         const cas = new Case();       
-        cas.title = req.body.title;
-        cas.money = req.body.money;
-        cas.quota = req.body.quota;
-        cas.cycle = req.body.cycle;
-        cas.days = req.body.days;
-        cas.types = req.body.types;
-        cas.differences = req.body.differences;  
+        cas.set({
+            title : req.body.title,
+            money : req.body.money,
+            quota : req.body.quota,
+            cycle : req.body.cycle,
+            days : req.body.days,
+            types : req.body.types,
+            differences : req.body.differences 
+        }); 
         cas.save(function(err) {
             if (err)
                 res.send(err);
@@ -28,22 +30,22 @@ router.get('/',function(req, res) {
     });
 
 //查改删
-router.get('/:cas_id', function(req,res){
-    Case.findById(req.params.cas_id, function(err,cas){
+router.get('/:_id', function(req,res){
+    Case.findById(req.params._id, function(err,cas){
         if(err) res.send(err);
         res.json(cas);
     });
 });
-router.put('/:cas_id', function(req, res) {
-    Case.findById(req.params.cas_id, function(err, cas) {
+router.put('/:_id', function(req, res) {
+    Case.findById(req.params._id, function(err, cas) {
         if (err) res.send(err);
-        if (req.body.title != null) { cas.title = req.body.title; }
-        if (req.body.money != null) { cas.money = req.body.money; }
-        if (req.body.quota != null) { cas.quota = req.body.quota; }
-        if (req.body.cycle != null) { cas.cycle = req.body.cycle; }
-        if (req.body.days != null) { cas.days = req.body.days; }
-        if (req.body.types != null) { cas.types = req.body.types; }
-        if (req.body.differences != null) { cas.differences = req.body.differences; }    
+        if (req.body.title)  cas.title = req.body.title;
+        if (req.body.money)  cas.money = req.body.money;
+        if (req.body.quota)  cas.quota = req.body.quota;
+        if (req.body.cycle)  cas.cycle = req.body.cycle;
+        if (req.body.days)  cas.days = req.body.days;
+        if (req.body.types)  cas.types = req.body.types;
+        if (req.body.differences)  cas.differences = req.body.differences;   
 
         cas.save(function(err) {
             if (err) res.send(err);
@@ -52,8 +54,8 @@ router.put('/:cas_id', function(req, res) {
 
     });
 });
-router.delete('/:cas_id',function(req, res) {
-    Case.remove({ _id: req.params.cas_id}, 
+router.delete('/:_id',function(req, res) {
+    Case.remove({ _id: req.params._id}, 
         function(err, cas) {
         if (err) res.send(err);
         res.json({ message: 'Successfully deleted' });
