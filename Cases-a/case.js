@@ -1,8 +1,14 @@
 const express = require('express');
 const Case = require('../Cases-a');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
+//新增案例
 router.post('/',function(req, res) {
+    const token = req.query.token;
+    jwt.verify(token, 'secretKey', function(err){
+        if(err)
+            return res.json('请先登录账号');
         const cas = new Case();       
         cas.set({
             title : req.body.title,
@@ -16,10 +22,11 @@ router.post('/',function(req, res) {
         cas.save(function(err) {
             if (err)
                 res.send(err);
-            res.json({ message: 'Case created!' });
+            res.json('添加成功');
         });
-
     });
+});
+//查看案例
 router.get('/',function(req, res) {
         Case.find(function(err, cases) {
             if (err)
@@ -36,29 +43,38 @@ router.get('/:_id', function(req,res){
         res.json(cas);
     });
 });
-router.put('/:_id', function(req, res) {
-    Case.findById(req.params._id, function(err, cas) {
-        if (err) res.send(err);
-        if (req.body.title)  cas.title = req.body.title;
-        if (req.body.money)  cas.money = req.body.money;
-        if (req.body.quota)  cas.quota = req.body.quota;
-        if (req.body.cycle)  cas.cycle = req.body.cycle;
-        if (req.body.days)  cas.days = req.body.days;
-        if (req.body.types)  cas.types = req.body.types;
-        if (req.body.differences)  cas.differences = req.body.differences;   
-
-        cas.save(function(err) {
+router.patch('/:_id', function(req, res) {
+    const token = req.query.token;
+    jwt.verify(token, 'secretKey', function(err){
+        if(err)
+            return res.json('请先登录账号');
+        Case.findById(req.params._id, function(err, cas) {
             if (err) res.send(err);
-            res.json({ message: 'Case updated!' });
-        });
+            if (req.body.title)  cas.title = req.body.title;
+            if (req.body.money)  cas.money = req.body.money;
+            if (req.body.quota)  cas.quota = req.body.quota;
+            if (req.body.cycle)  cas.cycle = req.body.cycle;
+            if (req.body.days)  cas.days = req.body.days;
+            if (req.body.types)  cas.types = req.body.types;
+            if (req.body.differences)  cas.differences = req.body.differences;   
 
+            cas.save(function(err) {
+                if (err) res.send(err);
+                res.json('案例已更新');
+            });
+        });
     });
 });
 router.delete('/:_id',function(req, res) {
-    Case.remove({ _id: req.params._id}, 
-        function(err, cas) {
-        if (err) res.send(err);
-        res.json({ message: 'Successfully deleted' });
+    const token = req.query.token;
+    jwt.verify(token, 'secretKey', function(err){
+        if(err)
+            return res.json('请先登录账号');
+        Case.remove({ _id: req.params._id}, 
+            function(err, cas) {
+            if (err) res.send(err);
+            res.json('已删除');
+        });
     });
 });
 
