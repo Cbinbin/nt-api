@@ -7,7 +7,11 @@ const CaseSchema = new mongoose.Schema({
 	cycle: String,
 	days: String,
 	types: String,
-	differences: String
+	differences: String,
+	photoUrl: String,
+	pics: Array,
+	description: String,
+	accomplish: Boolean
 });
 
 module.exports = mongoose.model('Case', CaseSchema);

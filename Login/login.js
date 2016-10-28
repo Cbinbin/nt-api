@@ -5,23 +5,25 @@ const jwt = require('jsonwebtoken');
 
 //找到库中存在admin的name并转化为数组
 var users = new Array();
-	Login.find({}, {_id:0, name:1 },function(err,ss){
+	
+//函数判定
+const exists = function(username) {
+	var y = false;
+
+	Login.find({}, {_id:0, name:1 }, (err,ss) => {
 		if (err) console.error(err);
+
 		users = ss.map((doc) => {
 	  	return doc.name;
 		});
 		return users;
 	});
-//函数判定
-const exists = function(username) {
-	var y = false;
-
 	users.map((item, index) => {
 	   	if (username == item) {
 	   		y = true;
 	  		return
 	   	}
-	 });
+	});
 	return y;
 }
 
@@ -29,7 +31,7 @@ const exists = function(username) {
 //新增管理
 router.post('/new_user', function(req, res) {
 	
-	if(exists(req.body.name))
+	if(exists(req.body.name)) 
 		return res.json('用户已存在,注册失败');
 	const admin = new Login({
 		name: req.body.name,

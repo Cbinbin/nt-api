@@ -17,7 +17,11 @@ router.post('/',function(req, res) {
             cycle : req.body.cycle,
             days : req.body.days,
             types : req.body.types,
-            differences : req.body.differences 
+            differences : req.body.differences, 
+            photoUrl: req.body.photoUrl,
+            pics: req.body.pics,
+            description: req.body.description,
+            accomplish: req.body.accomplish
         }); 
         cas.save(function(err) {
             if (err)
@@ -56,7 +60,11 @@ router.patch('/:_id', function(req, res) {
             if (req.body.cycle)  cas.cycle = req.body.cycle;
             if (req.body.days)  cas.days = req.body.days;
             if (req.body.types)  cas.types = req.body.types;
-            if (req.body.differences)  cas.differences = req.body.differences;   
+            if (req.body.differences)  cas.differences = req.body.differences;
+            if (req.body.photoUrl)  cas.photoUrl = req.body.photoUrl;
+            if (req.body.pics)  cas.pics = req.body.pics;
+            if (req.body.description)  cas.description = req.body.description;
+            if (req.body.accomplish)  cas.accomplish = req.body.accomplish;   
 
             cas.save(function(err) {
                 if (err) res.send(err);
